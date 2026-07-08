@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>器ライティングシミュレーター</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.185.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.185.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <!-- 3D Viewport -->
+    <div id="viewport-container">
+      <div id="error-message" class="hidden"></div>
+    </div>
+
+    <!-- Side Panel -->
+    <div id="side-panel">
+      <!-- Main Light Card -->
+      <div class="card" id="main-light-card">
+        <h2>メインライト</h2>
+
+        <div class="control-group">
+          <label>角度 (時計表記)</label>
+          <div class="dial-container">
+            <input type="range" id="main-angle-dial" min="0" max="12" step="0.5" value="6">
+            <span class="value-display" id="main-angle-val">6時</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>高さ角度</label>
+          <div class="slider-container">
+            <input type="range" id="main-height" min="0" max="90" step="1" value="45">
+            <span class="value-display" id="main-height-val">45°</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>距離 (cm)</label>
+          <div class="slider-container">
+            <input type="range" id="main-distance" min="10" max="200" step="1" value="100">
+            <span class="value-display" id="main-distance-val">100cm</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>ソフトボックス幅 (cm)</label>
+          <div class="slider-container">
+            <input type="range" id="main-width" min="10" max="150" step="1" value="60">
+            <span class="value-display" id="main-width-val">60cm</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>ソフトボックス高さ (cm)</label>
+          <div class="slider-container">
+            <input type="range" id="main-height-size" min="10" max="150" step="1" value="60">
+            <span class="value-display" id="main-height-size-val">60cm</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sub Light Card -->
+      <div class="card" id="sub-light-card">
+        <div class="card-header">
+          <h2>サブライト</h2>
+          <label class="toggle-switch">
+            <input type="checkbox" id="sub-light-toggle">
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+        <div class="control-group">
+          <label>モード</label>
+          <select id="sub-light-mode">
+            <option value="rim">リムライト</option>
+            <option value="soft">柔らげ</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>角度 (時計表記)</label>
+          <div class="slider-container">
+            <input type="range" id="sub-angle" min="0" max="12" step="0.5" value="11">
+            <span class="value-display" id="sub-angle-val">11時</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>高さ角度</label>
+          <div class="slider-container">
+            <input type="range" id="sub-height" min="0" max="90" step="1" value="20">
+            <span class="value-display" id="sub-height-val">20°</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>距離 (cm)</label>
+          <div class="slider-container">
+            <input type="range" id="sub-distance" min="10" max="200" step="1" value="150">
+            <span class="value-display" id="sub-distance-val">150cm</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reflector Card -->
+      <div class="card" id="reflector-card">
+        <div class="card-header">
+          <h2>レフ板</h2>
+          <label class="toggle-switch">
+            <input type="checkbox" id="reflector-toggle">
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+        <div class="control-group">
+          <label>色</label>
+          <select id="reflector-color">
+            <option value="white">白</option>
+            <option value="silver">銀</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>強度</label>
+          <div class="slider-container">
+            <input type="range" id="reflector-intensity" min="0" max="100" step="1" value="50">
+            <span class="value-display" id="reflector-intensity-val">50%</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>距離 (cm)</label>
+          <div class="slider-container">
+            <input type="range" id="reflector-distance" min="5" max="100" step="1" value="30">
+            <span class="value-display" id="reflector-distance-val">30cm</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Zebra Overlay Card -->
+      <div class="card" id="zebra-card">
+        <div class="card-header">
+          <h2>白飛び可視化</h2>
+          <label class="toggle-switch">
+            <input type="checkbox" id="zebra-toggle">
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <div class="control-group">
+          <label>閾値</label>
+          <div class="slider-container">
+            <input type="range" id="zebra-threshold" min="0.5" max="1.0" step="0.01" value="0.95">
+            <span class="value-display" id="zebra-threshold-val">0.95</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strobe Calc Card -->
+      <div class="card" id="strobe-card">
+        <h2>撮影条件・ストロボ換算</h2>
+        <div class="control-group">
+          <label>ストロボ機種</label>
+          <select id="strobe-profile">
+            <!-- Populated dynamically or static -->
+            <option value="TT350S">Godox TT350S</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>想定ISO</label>
+          <input type="number" id="strobe-iso" value="100">
+        </div>
+        <div class="control-group">
+          <label>想定F値</label>
+          <input type="number" id="strobe-f" value="8">
+        </div>
+        <div class="result-box">
+          <span>提案出力: </span><strong id="strobe-result">計算中...</strong>
+        </div>
+      </div>
+
+      <!-- Presets Card -->
+      <div class="card" id="presets-card">
+        <h2>プリセット</h2>
+        <div class="control-group preset-save-group">
+          <input type="text" id="preset-name" placeholder="プリセット名">
+          <button id="preset-save-btn" class="primary-btn">保存</button>
+        </div>
+        <div id="preset-list" class="preset-list">
+          <!-- Presets populated here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
