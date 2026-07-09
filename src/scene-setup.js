@@ -21,6 +21,10 @@ export function initScene() {
   renderer.setSize(width, height);
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  const pmremGenerator = new THREE.PMREMGenerator(renderer);
+  pmremGenerator.compileEquirectangularShader();
+  scene.environment = pmremGenerator.fromScene(new THREE.Scene()).texture;
   // Note: RectAreaLight does not support shadows out of the box so no shadow map enabled
 
   container.appendChild(renderer.domElement);
