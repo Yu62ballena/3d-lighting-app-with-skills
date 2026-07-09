@@ -11,6 +11,8 @@ const BASE_DISTANCE = 1.0; // meters (100cm)
 const BASE_INTENSITY = 5.0;
 
 export function initLighting(scene) {
+  RectAreaLightUniformsLib.init();
+
 
   // Add ambient light to prevent pitch black shadows
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
