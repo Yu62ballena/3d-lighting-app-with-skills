@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { initScene, scene, camera, renderer, controls } from './scene-setup.js';
 import { loadModel } from './model-loader.js';
 import { initLighting, mainLight } from './lighting.js';
+import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import { initZebraOverlay, renderWithComposer } from './zebra-overlay.js';
 import { initDragControls, onLightDragged, attachToLight } from './drag-controls.js';
 import { initUIControls, syncUIFromDrag } from './ui-controls.js';
@@ -13,6 +14,9 @@ const timer = new THREE.Clock(); // Using Clock for r0.185.0 compat or general u
 function init() {
   // 1. Initialize Scene (Renderer, Camera, OrbitControls)
   initScene();
+
+  // Initialize RectAreaLight support right after renderer is created
+  RectAreaLightUniformsLib.init();
 
   // 2. Load Model (USDZ -> GLTF fallback)
   loadModel(scene);

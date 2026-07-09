@@ -11,8 +11,6 @@ const BASE_DISTANCE = 1.0; // meters (100cm)
 const BASE_INTENSITY = 5.0;
 
 export function initLighting(scene) {
-  // Required for RectAreaLight to work
-  RectAreaLightUniformsLib.init();
 
   // Add ambient light to prevent pitch black shadows
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
@@ -25,7 +23,7 @@ export function initLighting(scene) {
   scene.add(mainLight);
 
   mainLightHelper = new RectAreaLightHelper(mainLight);
-  mainLight.add(mainLightHelper);
+  // mainLight.add(mainLightHelper);
 
   // 2. Sub Light (2nd light)
   subLight = new THREE.RectAreaLight(0xffffff, BASE_INTENSITY * 0.5, 0.4, 0.4);
@@ -33,7 +31,7 @@ export function initLighting(scene) {
   scene.add(subLight);
 
   subLightHelper = new RectAreaLightHelper(subLight);
-  subLight.add(subLightHelper);
+  // subLight.add(subLightHelper);
 
   // 3. Reflector (simulated as a weak RectAreaLight)
   reflectorLight = new THREE.RectAreaLight(0xffffff, BASE_INTENSITY * 0.3, 0.8, 0.8);
@@ -41,7 +39,7 @@ export function initLighting(scene) {
   scene.add(reflectorLight);
 
   reflectorLightHelper = new RectAreaLightHelper(reflectorLight);
-  reflectorLight.add(reflectorLightHelper);
+  // reflectorLight.add(reflectorLightHelper);
 
   // Initialize positions based on defaults
   updateMainLight(6, 45, 100, 60, 60); // 6 o'clock, 45 deg up, 100cm dist, 60x60 size

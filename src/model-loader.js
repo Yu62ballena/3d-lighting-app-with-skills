@@ -52,6 +52,16 @@ function onModelLoaded(modelGroup, scene) {
 
   if (currentModel) {
     scene.remove(currentModel);
+    currentModel.traverse((child) => {
+      if (child.isMesh) {
+        child.geometry.dispose();
+        if (child.material.isMaterial) {
+          child.material.dispose();
+        } else if (Array.isArray(child.material)) {
+          child.material.forEach(mat => mat.dispose());
+        }
+      }
+    });
   }
 
   currentModel = modelGroup;
