@@ -25,7 +25,7 @@ export function initDragControls(camera, domElement, scene, orbitControls) {
     }
   });
 
-  scene.add(transformControl);
+scene.add(transformControl.getHelper());
 }
 
 export function attachToLight(light) {

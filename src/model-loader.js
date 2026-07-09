@@ -5,8 +5,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 export let currentModel = null;
 
 export function loadModel(scene) {
-  const usdzPath = 'assets/models/cat-placeholder.usdz';
-  const gltfPath = 'assets/models/cat-placeholder.glb';
+  const gltfPath = 'assets/models/apple-placeholder.glb';
 
   const showError = (msg) => {
     const errorEl = document.getElementById('error-message');
@@ -18,28 +17,16 @@ export function loadModel(scene) {
     createFallbackCylinder(scene);
   };
 
-  const usdzLoader = new USDZLoader();
-  usdzLoader.load(
-    usdzPath,
-    (group) => {
-      onModelLoaded(group, scene);
+  const gltfLoader = new GLTFLoader();
+  gltfLoader.load(
+    gltfPath,
+    (gltf) => {
+      onModelLoaded(gltf.scene, scene);
     },
     undefined,
-    (err) => {
-      console.warn(`USDZ load failed: ${err}. Falling back to GLTF...`);
-      // Fallback to GLTF
-      const gltfLoader = new GLTFLoader();
-      gltfLoader.load(
-        gltfPath,
-        (gltf) => {
-          onModelLoaded(gltf.scene, scene);
-        },
-        undefined,
-        (gltfErr) => {
-          console.error(`GLTF fallback failed: ${gltfErr}`);
-          showError('モデルの読み込みに失敗しました。');
-        }
-      );
+    (gltfErr) => {
+      console.error(`GLTF load failed: ${gltfErr}`);
+      showError('モデルの読み込みに失敗しました。');
     }
   );
 }
